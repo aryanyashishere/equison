@@ -25,11 +25,13 @@ import { useRouter } from 'next/navigation';
 
 const AuthForm = ({ type }: { type: string }) => {
   const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
+  const formSchema = authFormSchema(type);
 
     // 1. Define your form.
-    const form = useForm<z.infer<typeof authFormSchema>>({
-      resolver: zodResolver(authFormSchema),
+    const form = useForm<z.infer<typeof formSchema>>({
+      resolver: zodResolver(formSchema),
       defaultValues: {
         email: "",
         password: ''
@@ -37,7 +39,7 @@ const AuthForm = ({ type }: { type: string }) => {
     })
 
 
-  function onSubmit(values: z.infer<typeof authFormSchema>){
+  function onSubmit(values: z.infer<typeof formSchema>){
     console.log(values)
   }
 
