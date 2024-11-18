@@ -53,15 +53,15 @@ const AuthForm = ({ type }: { type: string }) => {
         setUser(newUser)
         }
 
-        if{type=== 'sign-in'}{
-          const response = await signIn({
-            email: data.email,
-            password: data.password,
-          })
+        // if{type=== 'sign-in'}{
+          // const response = await signIn({
+          //   email: data.email,
+          //   password: data.password,
+          // })
 
-          if(response) router.push("/")
+          // if(response) router.push("/")
           
-        }
+        //  }
         
       }catch (error) {
       console.log(error)
@@ -174,10 +174,14 @@ const AuthForm = ({ type }: { type: string }) => {
               placeholder='Enter your password' />
 
               <div className="flex flex-col gap-4">
-                <Button type="submit"
-                 className="form-btn">
-                  
-
+              <Button type="submit" disabled={isLoading} className="form-btn">
+                  {isLoading ? (
+                    <>
+                      <Loader2 size={20} className="animate-spin" /> &nbsp;
+                      Loading...
+                    </>
+                  ) : type === 'sign-in' 
+                    ? 'Sign In' : 'Sign Up'}
                 </Button>
               </div>
             </form>

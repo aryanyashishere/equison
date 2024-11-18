@@ -1,8 +1,10 @@
 'use server';
 
-import { ID } from "node-appwrite";
+import { ID, Query } from "node-appwrite";
 import { createAdminClient, createSessionClient } from "../appwrite";
 import { parseStringify } from "../utils";
+import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
 
 export const signIn = async ()=>{
     try{
@@ -14,17 +16,19 @@ export const signIn = async ()=>{
     }
 } 
 export const signUp = async (userData: SignUpParams)=>{
+    const { email,password, firstName, lastName } = userData;
+
+
     try{
         // we mostly do here MUTATIONS/ DATABASE/  MAKE FETCH 
-        // create a user account 
-        let newUserAccount;
+// create a user account 
+        // let newUserAccount;
  
         const {account} = await createAdminClient();
 
-        const { email, firstName, lastName } = userData;
 
 
-       newUserAccount = await account.create(
+       const newUserAccount = await account.create(
           ID.unique(), 
           email, 
           password, 
