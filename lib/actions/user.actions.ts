@@ -1,6 +1,8 @@
 'use server';
 
-import { createSessionClient } from "../appwrite";
+import { ID } from "node-appwrite";
+import { createAdminClient, createSessionClient } from "../appwrite";
+import { parseStringify } from "../utils";
 
 export const signIn = async ()=>{
     try{
@@ -11,12 +13,38 @@ export const signIn = async ()=>{
         console.log("error", error)
     }
 } 
-export const signUp = async ()=>{
+export const signUp = async (userData: SignUpParams)=>{
     try{
         // we mostly do here MUTATIONS/ DATABASE/  MAKE FETCH 
         // create a user account 
+        let newUserAccount;
+ 
+        const {account} = await createAdminClient();
 
-    }catch(error){
+        const { email, firstName, lastName } = userData;
+
+
+       newUserAccount = await account.create(
+          ID.unique(), 
+          email, 
+          password, 
+          `${firstName} ${lastName}`
+        );
+
+        const session = await account.createEmailPasswordSession(email, password);
+
+    cookies().set("appwrite-session", session.secret, {
+      path: "/",
+      httpOnly: true,
+      sameSite: "strict",
+      secure: true,
+    });
+    
+    return parseStringify(newUserAccount);
+
+
+    }
+    catch(error){
         console.log("error", error)
     }
 } 
