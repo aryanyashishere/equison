@@ -4,12 +4,17 @@ import { ID, Query } from "node-appwrite";
 import { createAdminClient, createSessionClient } from "../appwrite";
 import { parseStringify } from "../utils";
 import { cookies } from "next/headers";
-import { revalidatePath } from "next/cache";
 
-export const signIn = async ()=>{
+export const signIn = async ({email, password}: signInProps)=>{
     try{
         // we mostly do here MUTATIONS/ DATABASE/  MAKE FETCH 
+        // make a session to get the info for sign in function 
+        // we need email and password only for sign in verification 
 
+        const {account} = await createAdminClient();
+
+        const response = await account.createEmailPasswordSession(email, password);
+        return parseStringify(response);
         
     }catch(error){
         console.log("error", error)
