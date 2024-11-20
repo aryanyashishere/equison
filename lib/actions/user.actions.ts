@@ -2,11 +2,12 @@
 
 import { ID, Query } from "node-appwrite";
 import { createAdminClient, createSessionClient } from "../appwrite";
-import { encryptId, parseStringify } from "../utils";
+import { encryptId, extractCustomerIdFromUrl, parseStringify } from "../utils";
 import { cookies } from "next/headers";
 import { plaidClient } from "../plaid";
 import { CountryCode, ProcessorTokenCreateRequest, ProcessorTokenCreateRequestProcessorEnum, Products } from "plaid";
 import { revalidatePath } from "next/cache";
+import { createDwollaCustomer } from "./dwolla.actions";
 
 
 const {
@@ -33,12 +34,11 @@ export const signIn = async ({email, password}: signInProps)=>{
 } 
 export const signUp = async (userData: SignUpParams)=>{
     const { email,password, firstName, lastName } = userData;
-
+    let newUserAccount;
 
     try{
         // we mostly do here MUTATIONS/ DATABASE/  MAKE FETCH 
 // create a user account 
-        let newUserAccount;
  
         const {account} = await createAdminClient();
 
@@ -49,6 +49,30 @@ export const signUp = async (userData: SignUpParams)=>{
           `${firstName} ${lastName}`
         );
 
+        if(!newUserAccount) throw new Error('Error creating user')
+
+          const dwollaCustomerUrl = await createDwollaCustomer({
+            ...userData,
+            type: 'personal'
+          })
+
+          if(!dwollaCustomerUrl) throw new Error('Error creating Dwolla customer')
+
+            const dwollaCustomerId = extractCustomerIdFromUrl(dwollaCustomerUrl);
+
+            const newUser = await database.createDocument(
+              DATABASE_ID!,
+              USER_COLLECTION_ID!,
+              ID.unique(),
+              {
+                ...userData,
+                userId: newUserAccount.$id,
+                dwollaCustomerId,
+                dwollaCustomerUrl
+              }
+            )
+
+
         const session = await account.createEmailPasswordSession(email, password);
 
     cookies().set("appwrite-session", session.secret, {
@@ -58,7 +82,7 @@ export const signUp = async (userData: SignUpParams)=>{
       secure: true,
     });
     
-    return parseStringify(newUserAccount);
+    return parseStringify(newUser);
 
 
     }
