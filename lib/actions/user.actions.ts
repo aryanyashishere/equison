@@ -32,15 +32,15 @@ export const signIn = async ({email, password}: signInProps)=>{
         console.log("error", error)
     }
 } 
-export const signUp = async (userData: SignUpParams)=>{
-    const { email,password, firstName, lastName } = userData;
+export const signUp = async ({password, ...userData}: SignUpParams)=>{
+    const { email, firstName, lastName } = userData;
     let newUserAccount;
 
     try{
         // we mostly do here MUTATIONS/ DATABASE/  MAKE FETCH 
 // create a user account 
  
-        const {account} = await createAdminClient();
+        const {account, database} = await createAdminClient();
 
         newUserAccount = await account.create(
           ID.unique(), 
@@ -141,7 +141,7 @@ export const createBankAccount = async ({
   accountId,
   accessToken,
   fundingSourceUrl,
-  sharableId,
+  shareableId,
 }: createBankAccountProps) => {
   try {
     const { database } = await createAdminClient();
@@ -156,7 +156,7 @@ export const createBankAccount = async ({
         accountId,
         accessToken,
         fundingSourceUrl,
-        sharableId,
+        shareableId,
       }
     )
 
