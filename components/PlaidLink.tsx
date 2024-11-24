@@ -45,6 +45,8 @@ const PlaidLink = ({ user, variant }: PlaidLinkProps) => {
         >
           Connect bank
         </Button>
+        // we added the ghost and hiddenl and default connect bank button on sidebar hehe from down 
+        
       ): variant === 'ghost' ? (
         <Button onClick={() => open()} variant="ghost" className="plaidlink-ghost">
          <Image 
