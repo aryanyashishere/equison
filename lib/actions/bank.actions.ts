@@ -9,10 +9,10 @@ import {
   TransferType,
 } from "plaid";
 
-// import { plaidClient } from "../plaid.config";
+import { plaidClient } from "../plaid";
 import { parseStringify } from "../utils";
 
-// import { getTransactionsByBankId } from "./transaction.actions";
+import { getTransactionsByBankId } from "./transaction.actions";
 import { getBanks, getBank } from "./user.actions";
 
 // Get multiple bank accounts
@@ -45,10 +45,11 @@ export const getAccounts = async ({ userId }: getAccountsProps) => {
           type: accountData.type as string,
           subtype: accountData.subtype! as string,
           appwriteItemId: bank.$id,
-          shareableId: bank.sharableId,
+          shareableId: bank.shareableId,
         };
-
+        console.log("account from getAccounts : here")
         return account;
+
       })
     );
 
@@ -58,6 +59,7 @@ export const getAccounts = async ({ userId }: getAccountsProps) => {
     }, 0);
 
     return parseStringify({ data: accounts, totalBanks, totalCurrentBalance });
+    console.log("yahan accounts total banks aur total balance print hona chhaiye par hua nain shyd aur error bhi nhin aaya")
   } catch (error) {
     console.error("An error occurred while getting the accounts:", error);
   }
@@ -121,7 +123,7 @@ export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
 
     return parseStringify({
       data: account,
-      transactions: allTransactions,
+      // transactions: allTransactions,
     });
   } catch (error) {
     console.error("An error occurred while getting the account:", error);

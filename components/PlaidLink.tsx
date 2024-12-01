@@ -15,6 +15,9 @@ const PlaidLink = ({ user, variant }: PlaidLinkProps) => {
 
       const data = await createLinkToken(user); //to create the token , we have to make configurations in user actions in user.actions.ts
       setToken(data?.linkToken);
+
+      console.log("setToken ho gaya hai pg 19 plaidlink ")
+
     }
 
     getLinkToken();
@@ -25,7 +28,7 @@ const PlaidLink = ({ user, variant }: PlaidLinkProps) => {
       publicToken: public_token,
       user,
     })
-
+console.log("inside the plaidlink inside the on success pg 28 public token: user:  " + public_token +" " + user )
     router.push('/');
   }, [user])
   

@@ -11,20 +11,26 @@ const Home = async ({ searchParams: { id, page } }: SearchParamProps) => {
   const currentPage = Number(page as string) || 1;
   
   const loggedIn = await getLoggedInUser();
-  
+  console.log("from root page : logged in problem here "+loggedIn)
   const accounts = await getAccounts({ 
     userId: loggedIn.$id 
   })
-  if(!accounts) return;
+  if(!accounts) return "maa chud gayi accounts nahin hai";
   
   const accountsData = accounts?.data;
-  const appwriteItemId = (id as string) || accountsData[0]?.appwriteItemId;
+
   
+  const appwriteItemId = (id as string) || accountsData[0]?.appwriteItemId;
+  console.log("ye lo appwrite item id "+appwriteItemId)
   const account = await getAccount({ appwriteItemId })
   console.log({
     accountsData,
     account
   })
+  console.log("account mein ye hai : " + {accounts})
+  // console.log("total banks ki value " + {account?.totalBanks})
+  // console.log("Transactions ki value " + {account?.transactions})
+
   return (
 <section className="home">
     <div className="home-content">
@@ -39,14 +45,14 @@ const Home = async ({ searchParams: { id, page } }: SearchParamProps) => {
         <TotalBalanceBox 
           accounts={accountsData}
           // real banking data niche hai
-          // totalBanks={account?.totalBanks}
-          // totalCurrentBalance={accounts?.totalCurrentBalance}
+          totalBanks={account?.totalBanks}
+          totalCurrentBalance={accounts?.totalCurrentBalance}
 
 
           // fake banking data niche hai 
           // accounts={[]}
-          totalBanks={1}
-          totalCurrentBalance={110}
+          // totalBanks={1}
+          // totalCurrentBalance={110}
         />
       </header>
       {/* RECENT TRANSACTIONS */}
@@ -54,7 +60,8 @@ const Home = async ({ searchParams: { id, page } }: SearchParamProps) => {
       accounts={accountsData}
       transactions={account?.transactions}
       appwriteItemId={appwriteItemId}
-      page={currentPage}/> 
+      page={currentPage}
+      /> 
       </div>
 
       <RightSidebar

@@ -7,7 +7,7 @@ import { cookies } from "next/headers";
 import { plaidClient } from "../plaid";
 import { CountryCode, ProcessorTokenCreateRequest, ProcessorTokenCreateRequestProcessorEnum, Products } from "plaid";
 import { revalidatePath } from "next/cache";
-import { createDwollaCustomer } from "./dwolla.actions";
+import { addFundingSource, createDwollaCustomer } from "./dwolla.actions";
 
 
 const {
@@ -25,7 +25,7 @@ export const getUserInfo = async ({ userId }: getUserInfoProps) => {
       USER_COLLECTION_ID!,
       [Query.equal('userId', [userId])]
     )
-
+console.log("getuserinfo func ka mamla hai : ")
     return parseStringify(user.documents[0]);
   } catch (error) {
     console.log(error)
@@ -101,20 +101,22 @@ export const signUp = async ({password, ...userData}: SignUpParams)=>{
 
 
         const session = await account.createEmailPasswordSession(email, password);
-
     cookies().set("appwrite-session", session.secret, {
       path: "/",
       httpOnly: true,
       sameSite: "strict",
       secure: true,
     });
-    
+    console.log("it is using cookies.set from signup ")
+
     return parseStringify(newUser);
 
 
     }
     catch(error){
         console.log("error", error)
+        console.log("it is using cookies.set from signup ERROR")
+
     }
 } 
 
@@ -126,15 +128,16 @@ export async function getLoggedInUser() {
       // (======== after connection with plaid ===========)
       const { account } = await createSessionClient();
       const result = await account.get();
+      console.log("result  ki value in getloggedin tsx pg 132"+ parseStringify(result))
   
       const user = await getUserInfo({ userId: result.$id})
-  
       return parseStringify(user);
 
   
   
     } catch (error) {
       console.log(error)
+      console.log("getloggedinuser mein prblm ")
       return null;
     }
   }
@@ -145,8 +148,10 @@ export const logoutAccount = async () => {
     const { account } = await createSessionClient();
     cookies().delete('appwrite-session');
     await account.deleteSession('current');
+    console.log("logout ho gaya acche se pg 152")
 
   }catch(error){
+    console.log("logout na hora pg 154")
     return null;
   }
 }
@@ -158,45 +163,14 @@ export const createLinkToken = async (user: User) => {
         client_user_id: user.$id
       },
       client_name: `${user.firstName} ${user.lastName}`,
-      products: ['auth'] as Products[],
+      products: ['auth', 'transactions'] as Products[],
       language: 'en',
       country_codes: ['US'] as CountryCode[],
     }
 
     const response = await plaidClient.linkTokenCreate(tokenParams);
-
+    console.log("createlinktoken mein response data link token aur link token yahan return karega : ")
     return parseStringify({ linkToken: response.data.link_token })
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-export const createBankAccount = async ({
-  userId,
-  bankId,
-  accountId,
-  accessToken,
-  fundingSourceUrl,
-  shareableId,
-}: createBankAccountProps) => {
-  try {
-    const { database } = await createAdminClient();
-
-    const bankAccount = await database.createDocument(
-      DATABASE_ID!,
-      BANK_COLLECTION_ID!,
-      ID.unique(),
-      {
-        userId,
-        bankId,
-        accountId,
-        accessToken,
-        fundingSourceUrl,
-        shareableId,
-      }
-    )
-
-    return parseStringify(bankAccount);
   } catch (error) {
     console.log(error);
   }
@@ -240,9 +214,10 @@ export const exchangePublicToken = async ({
     });
     
     // If the funding source URL is not created, throw an error
-    if (!fundingSourceUrl) throw Error;
+    if (!fundingSourceUrl) throw Error("funding source nahin mila  pg 248");
 
-    // Create a bank account using the user ID, item ID, account ID, access token, funding source URL, and shareableId ID
+    // Create a bank account using the user ID, item ID, account ID, access token, funding source URL,
+    //  and shareableId ID
     await createBankAccount({
       userId: user.$id,
       bankId: itemId,
@@ -251,7 +226,7 @@ export const exchangePublicToken = async ({
       fundingSourceUrl,
       shareableId: encryptId(accountData.account_id),
     });
-
+console.log("at exchange public token 259 bank account ban gaya")
     // Revalidate the path to reflect the changes
     revalidatePath("/");
 
@@ -264,6 +239,40 @@ export const exchangePublicToken = async ({
   }
 }
 
+export const createBankAccount = async ({
+  userId,
+  bankId,
+  accountId,
+  accessToken,
+  fundingSourceUrl,
+  shareableId,
+}: createBankAccountProps) => {
+  try {
+    const { database } = await createAdminClient();
+
+    const bankAccount = await database.createDocument(
+      DATABASE_ID!,
+      BANK_COLLECTION_ID!,
+      ID.unique(),
+      {
+        userId,
+        bankId,
+        accountId,
+        accessToken,
+        fundingSourceUrl,
+        shareableId,
+      }
+    )
+    console.log("bankAccount ki info from createadminclient : pg 202 ")
+    return parseStringify(bankAccount);
+  } catch (error) {
+    console.log("bankAccount ki info from createadminclient :  NAHIN MILI ")
+    console.log(error);
+  }
+}
+
+
+
 export const getBanks = async ({ userId }: getBanksProps) => {
   try {
     const { database } = await createAdminClient();
@@ -273,9 +282,10 @@ export const getBanks = async ({ userId }: getBanksProps) => {
       BANK_COLLECTION_ID!,
       [Query.equal('userId', [userId])]
     )
-
+    console.log("bank mil gaya : getbanks : hehe ")
     return parseStringify(banks.documents);
   } catch (error) {
+    console.log("bank nahin mila getBanks : haha : ")
     console.log(error)
   }
 }
@@ -289,9 +299,12 @@ export const getBank = async ({ documentId }: getBankProps) => {
       BANK_COLLECTION_ID!,
       [Query.equal('$id', [documentId])]
     )
+    console.log("bank mil gaya : getbank : hehe ")
 
     return parseStringify(bank.documents[0]);
   } catch (error) {
+    console.log("bank nahin mila getBank : haha : ")
+
     console.log(error)
   }
 }
