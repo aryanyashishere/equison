@@ -11,7 +11,7 @@ const Home = async ({ searchParams: { id, page } }: SearchParamProps) => {
   const currentPage = Number(page as string) || 1;
   
   const loggedIn = await getLoggedInUser();
-  console.log("from root page : logged in problem here "+loggedIn)
+  console.log("from root page : logged in problem here ")
   const accounts = await getAccounts({ 
     userId: loggedIn.$id 
   })
@@ -23,11 +23,13 @@ const Home = async ({ searchParams: { id, page } }: SearchParamProps) => {
   const appwriteItemId = (id as string) || accountsData[0]?.appwriteItemId;
   console.log("ye lo appwrite item id "+appwriteItemId)
   const account = await getAccount({ appwriteItemId })
+  // if(!account  || ) console.log("account IS NOT HERE")
   console.log({
     accountsData,
     account
   })
-  console.log("account mein ye hai : " + {accounts})
+  // console.log("account mein ye hai : " + {accounts})
+
   // console.log("total banks ki value " + {account?.totalBanks})
   // console.log("Transactions ki value " + {account?.transactions})
 
@@ -45,7 +47,7 @@ const Home = async ({ searchParams: { id, page } }: SearchParamProps) => {
         <TotalBalanceBox 
           accounts={accountsData}
           // real banking data niche hai
-          totalBanks={account?.totalBanks}
+          totalBanks={accounts?.totalBanks}
           totalCurrentBalance={accounts?.totalCurrentBalance}
 
 

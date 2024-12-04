@@ -26,6 +26,7 @@ export const getUserInfo = async ({ userId }: getUserInfoProps) => {
       [Query.equal('userId', [userId])]
     )
 console.log("getuserinfo func ka mamla hai : ")
+    console.log( parseStringify(user.documents[0]));
     return parseStringify(user.documents[0]);
   } catch (error) {
     console.log(error)
@@ -128,9 +129,11 @@ export async function getLoggedInUser() {
       // (======== after connection with plaid ===========)
       const { account } = await createSessionClient();
       const result = await account.get();
-      console.log("result  ki value in getloggedin tsx pg 132"+ parseStringify(result))
+      console.log("result  ki value in getloggedin tsx pg 132")
+      console.log(parseStringify(result))
   
       const user = await getUserInfo({ userId: result.$id})
+      console.log(parseStringify(user))
       return parseStringify(user);
 
   
@@ -170,7 +173,15 @@ export const createLinkToken = async (user: User) => {
 
     const response = await plaidClient.linkTokenCreate(tokenParams);
     console.log("createlinktoken mein response data link token aur link token yahan return karega : ")
-    return parseStringify({ linkToken: response.data.link_token })
+    if (!response.data.link_token) {
+      console.log("Link token is missing!");
+  }
+
+  const linkTokenData = { linkToken: response.data.link_token };
+console.log("Returning object:", linkTokenData);
+return parseStringify(linkTokenData);
+
+    // return parseStringify({ linkToken: response.data.link_token })
   } catch (error) {
     console.log(error);
   }
@@ -263,8 +274,17 @@ export const createBankAccount = async ({
         shareableId,
       }
     )
-    console.log("bankAccount ki info from createadminclient : pg 202 ")
-    return parseStringify(bankAccount);
+
+    console.log("bankAccount ki info from createadminclient : pg 274 ", bankAccount);
+    // return parseStringify(bankAccount);
+    if (!bankAccount) {
+      console.error("bankAccount is undefined or null!");
+    }
+    
+    const parsedBankAccount = parseStringify(bankAccount);
+console.log("Parsed bankAccount object:", parsedBankAccount);
+return parsedBankAccount;
+
   } catch (error) {
     console.log("bankAccount ki info from createadminclient :  NAHIN MILI ")
     console.log(error);
@@ -283,6 +303,7 @@ export const getBanks = async ({ userId }: getBanksProps) => {
       [Query.equal('userId', [userId])]
     )
     console.log("bank mil gaya : getbanks : hehe ")
+    console.log(parseStringify(banks.documents))
     return parseStringify(banks.documents);
   } catch (error) {
     console.log("bank nahin mila getBanks : haha : ")
@@ -300,11 +321,29 @@ export const getBank = async ({ documentId }: getBankProps) => {
       [Query.equal('$id', [documentId])]
     )
     console.log("bank mil gaya : getbank : hehe ")
-
+    console.log(parseStringify(bank.documents[0]))
     return parseStringify(bank.documents[0]);
   } catch (error) {
     console.log("bank nahin mila getBank : haha : ")
 
+    console.log(error)
+  }
+}
+
+export const getBankByAccountId = async ({ accountId }: getBankByAccountIdProps) => {
+  try {
+    const { database } = await createAdminClient();
+
+    const bank = await database.listDocuments(
+      DATABASE_ID!,
+      BANK_COLLECTION_ID!,
+      [Query.equal('accountId', [accountId])]
+    )
+
+    if(bank.total !== 1) return null;
+
+    return parseStringify(bank.documents[0]);
+  } catch (error) {
     console.log(error)
   }
 }

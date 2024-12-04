@@ -30,7 +30,7 @@ const PlaidLink = ({ user, variant }: PlaidLinkProps) => {
     })
 console.log("inside the plaidlink inside the on success pg 28 public token: user:  " + public_token +" " + user )
     router.push('/');
-  }, [user])
+  }, [user, router])
   
   const config: PlaidLinkOptions = {
     token,

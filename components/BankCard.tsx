@@ -5,7 +5,7 @@ import Copy from './Copy';
 
 const BankCard = ({ account, userName, showBalance = true }: CreditCardProps) => {
 
-  console.log(account);
+  // console.log(account);
   return (
     <div className="flex flex-col">
       <Link href={`/transaction-history/?id=${account.appwriteItemId}`} className="bank-card">
@@ -29,7 +29,7 @@ const BankCard = ({ account, userName, showBalance = true }: CreditCardProps) =>
               </h2>
             </div>
             <p className="text-14 font-semibold tracking-[1.1px] text-white">
-              ●●●● ●●●● ●●●● <span className="text-16">1234</span>
+              ●●●● ●●●● ●●●● <span className="text-16">{account?.mask}</span>
             </p>
           </article>
         </div>
