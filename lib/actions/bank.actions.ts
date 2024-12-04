@@ -27,7 +27,11 @@ export const getAccounts = async ({ userId }: getAccountsProps) => {
         const accountsResponse = await plaidClient.accountsGet({
           access_token: bank.accessToken,
         });
+        console.log("accountsResponse THINGS HERE : ")
+        // console.log(parseStringify(accountsResponse))
         const accountData = accountsResponse.data.accounts[0];
+         console.log("accountData here : ");
+         console.log(parseStringify(accountData))
 
         // get institution info from plaid
         const institution = await getInstitution({
@@ -48,6 +52,8 @@ export const getAccounts = async ({ userId }: getAccountsProps) => {
           shareableId: bank.shareableId,
         };
         console.log("account from getAccounts : here")
+        console.log(account)
+        console.log(parseStringify(account))
         return account;
 
       })
@@ -57,9 +63,9 @@ export const getAccounts = async ({ userId }: getAccountsProps) => {
     const totalCurrentBalance = accounts.reduce((total, account) => {
       return total + account.currentBalance;
     }, 0);
-
+    console.log("total banks aur total balance total current balanceHERE : ")
+    console.log(parseStringify({ data: accounts, totalBanks, totalCurrentBalance }))
     return parseStringify({ data: accounts, totalBanks, totalCurrentBalance });
-    console.log("yahan accounts total banks aur total balance print hona chhaiye par hua nain shyd aur error bhi nhin aaya")
   } catch (error) {
     console.error("An error occurred while getting the accounts:", error);
   }
@@ -68,9 +74,14 @@ export const getAccounts = async ({ userId }: getAccountsProps) => {
 // Get one bank account
 export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
   try {
+  
+
     // get bank from db
     const bank = await getBank({ documentId: appwriteItemId });
-
+    const transactionsh = await getTransactions({ accessToken: bank?.accessToken });
+    console.log("Transactions from Plaid:", transactionsh);
+    
+    
     // get account info from plaid
     const accountsResponse = await plaidClient.accountsGet({
       access_token: bank.accessToken,
@@ -123,7 +134,7 @@ export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
 
     return parseStringify({
       data: account,
-      // transactions: allTransactions,
+      transactions: allTransactions,
     });
   } catch (error) {
     console.error("An error occurred while getting the account:", error);
