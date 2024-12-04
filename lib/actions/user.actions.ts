@@ -25,8 +25,8 @@ export const getUserInfo = async ({ userId }: getUserInfoProps) => {
       USER_COLLECTION_ID!,
       [Query.equal('userId', [userId])]
     )
-console.log("getuserinfo func ka mamla hai : ")
-    console.log( parseStringify(user.documents[0]));
+// console.log("getuserinfo func ka mamla hai : ")
+    // console.log( parseStringify(user.documents[0]));
     return parseStringify(user.documents[0]);
   } catch (error) {
     console.log(error)
@@ -108,7 +108,7 @@ export const signUp = async ({password, ...userData}: SignUpParams)=>{
       sameSite: "strict",
       secure: true,
     });
-    console.log("it is using cookies.set from signup ")
+    // console.log("it is using cookies.set from signup ")
 
     return parseStringify(newUser);
 
@@ -116,7 +116,7 @@ export const signUp = async ({password, ...userData}: SignUpParams)=>{
     }
     catch(error){
         console.log("error", error)
-        console.log("it is using cookies.set from signup ERROR")
+        // console.log("it is using cookies.set from signup ERROR")
 
     }
 } 
@@ -129,18 +129,18 @@ export async function getLoggedInUser() {
       // (======== after connection with plaid ===========)
       const { account } = await createSessionClient();
       const result = await account.get();
-      console.log("result  ki value in getloggedin tsx pg 132")
-      console.log(parseStringify(result))
+      // console.log("result  ki value in getloggedin tsx pg 132")
+      // console.log(parseStringify(result))
   
       const user = await getUserInfo({ userId: result.$id})
-      console.log(parseStringify(user))
+      // console.log(parseStringify(user))
       return parseStringify(user);
 
   
   
     } catch (error) {
       console.log(error)
-      console.log("getloggedinuser mein prblm ")
+      // console.log("getloggedinuser mein prblm ")
       return null;
     }
   }
@@ -151,10 +151,10 @@ export const logoutAccount = async () => {
     const { account } = await createSessionClient();
     cookies().delete('appwrite-session');
     await account.deleteSession('current');
-    console.log("logout ho gaya acche se pg 152")
+    // console.log("logout ho gaya acche se pg 152")
 
   }catch(error){
-    console.log("logout na hora pg 154")
+    // console.log("logout na hora pg 154")
     return null;
   }
 }
@@ -172,13 +172,13 @@ export const createLinkToken = async (user: User) => {
     }
 
     const response = await plaidClient.linkTokenCreate(tokenParams);
-    console.log("createlinktoken mein response data link token aur link token yahan return karega : ")
+    // console.log("createlinktoken mein response data link token aur link token yahan return karega : ")
     if (!response.data.link_token) {
       console.log("Link token is missing!");
   }
 
   const linkTokenData = { linkToken: response.data.link_token };
-console.log("Returning object:", linkTokenData);
+// console.log("Returning object:", linkTokenData);
 return parseStringify(linkTokenData);
 
     // return parseStringify({ linkToken: response.data.link_token })
@@ -237,7 +237,7 @@ export const exchangePublicToken = async ({
       fundingSourceUrl,
       shareableId: encryptId(accountData.account_id),
     });
-console.log("at exchange public token 259 bank account ban gaya")
+// console.log("at exchange public token 259 bank account ban gaya")
     // Revalidate the path to reflect the changes
     revalidatePath("/");
 
@@ -275,18 +275,18 @@ export const createBankAccount = async ({
       }
     )
 
-    console.log("bankAccount ki info from createadminclient : pg 274 ", bankAccount);
+    // console.log("bankAccount ki info from createadminclient : pg 274 ", bankAccount);
     // return parseStringify(bankAccount);
     if (!bankAccount) {
       console.error("bankAccount is undefined or null!");
     }
     
     const parsedBankAccount = parseStringify(bankAccount);
-console.log("Parsed bankAccount object:", parsedBankAccount);
+// console.log("Parsed bankAccount object:", parsedBankAccount);
 return parsedBankAccount;
 
   } catch (error) {
-    console.log("bankAccount ki info from createadminclient :  NAHIN MILI ")
+    // console.log("bankAccount ki info from createadminclient :  NAHIN MILI ")
     console.log(error);
   }
 }
@@ -302,8 +302,8 @@ export const getBanks = async ({ userId }: getBanksProps) => {
       BANK_COLLECTION_ID!,
       [Query.equal('userId', [userId])]
     )
-    console.log("bank mil gaya : getbanks : hehe ")
-    console.log(parseStringify(banks.documents))
+    // console.log("bank mil gaya : getbanks : hehe ")
+    // console.log(parseStringify(banks.documents))
     return parseStringify(banks.documents);
   } catch (error) {
     console.log("bank nahin mila getBanks : haha : ")
@@ -320,8 +320,8 @@ export const getBank = async ({ documentId }: getBankProps) => {
       BANK_COLLECTION_ID!,
       [Query.equal('$id', [documentId])]
     )
-    console.log("bank mil gaya : getbank : hehe ")
-    console.log(parseStringify(bank.documents[0]))
+    // console.log("bank mil gaya : getbank : hehe ")
+    // console.log(parseStringify(bank.documents[0]))
     return parseStringify(bank.documents[0]);
   } catch (error) {
     console.log("bank nahin mila getBank : haha : ")

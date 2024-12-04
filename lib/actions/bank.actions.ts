@@ -27,11 +27,11 @@ export const getAccounts = async ({ userId }: getAccountsProps) => {
         const accountsResponse = await plaidClient.accountsGet({
           access_token: bank.accessToken,
         });
-        console.log("accountsResponse THINGS HERE : ")
+        // console.log("accountsResponse THINGS HERE : ")
         // console.log(parseStringify(accountsResponse))
         const accountData = accountsResponse.data.accounts[0];
-         console.log("accountData here : ");
-         console.log(parseStringify(accountData))
+        //  console.log("accountData here : ");
+        //  console.log(parseStringify(accountData))
 
         // get institution info from plaid
         const institution = await getInstitution({
@@ -51,9 +51,9 @@ export const getAccounts = async ({ userId }: getAccountsProps) => {
           appwriteItemId: bank.$id,
           shareableId: bank.shareableId,
         };
-        console.log("account from getAccounts : here")
-        console.log(account)
-        console.log(parseStringify(account))
+        // console.log("account from getAccounts : here")
+        // console.log(account)
+        // console.log(parseStringify(account))
         return account;
 
       })
@@ -63,8 +63,8 @@ export const getAccounts = async ({ userId }: getAccountsProps) => {
     const totalCurrentBalance = accounts.reduce((total, account) => {
       return total + account.currentBalance;
     }, 0);
-    console.log("total banks aur total balance total current balanceHERE : ")
-    console.log(parseStringify({ data: accounts, totalBanks, totalCurrentBalance }))
+    // console.log("total banks aur total balance total current balanceHERE : ")
+    // console.log(parseStringify({ data: accounts, totalBanks, totalCurrentBalance }))
     return parseStringify({ data: accounts, totalBanks, totalCurrentBalance });
   } catch (error) {
     console.error("An error occurred while getting the accounts:", error);
@@ -78,10 +78,7 @@ export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
 
     // get bank from db
     const bank = await getBank({ documentId: appwriteItemId });
-    const transactionsh = await getTransactions({ accessToken: bank?.accessToken });
-    console.log("Transactions from Plaid:", transactionsh);
-    
-    
+ 
     // get account info from plaid
     const accountsResponse = await plaidClient.accountsGet({
       access_token: bank.accessToken,

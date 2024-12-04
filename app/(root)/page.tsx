@@ -11,7 +11,7 @@ const Home = async ({ searchParams: { id, page } }: SearchParamProps) => {
   const currentPage = Number(page as string) || 1;
   
   const loggedIn = await getLoggedInUser();
-  console.log("from root page : logged in problem here ")
+  // console.log("from root page : logged in problem here ")
   const accounts = await getAccounts({ 
     userId: loggedIn.$id 
   })
@@ -21,7 +21,7 @@ const Home = async ({ searchParams: { id, page } }: SearchParamProps) => {
 
   
   const appwriteItemId = (id as string) || accountsData[0]?.appwriteItemId;
-  console.log("ye lo appwrite item id "+appwriteItemId)
+  // console.log("ye lo appwrite item id "+appwriteItemId)
   const account = await getAccount({ appwriteItemId })
   // if(!account  || ) console.log("account IS NOT HERE")
   console.log({
