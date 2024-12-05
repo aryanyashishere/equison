@@ -8,34 +8,31 @@
  
 
   <h3 align="center">A Fintech Bank Application</h3>
+<h4 align="center">Explore it here: <a href="https://equison.vercel.app/" target="_blank"> Click here</a></h4>
 
    <div align="center">
-     Build this project step by step with our detailed tutorial by <a href="https://www.youtube.com/@javascriptmastery/videos" target="_blank"><b>Aryan Yash</b></a>
+   By <a href="https://www.youtube.com/@javascriptmastery/videos" target="_blank"><b>Aryan Yash</b></a>
     </div>
 </div>
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
 
-## Deploy on Vercel
+## Exploration
+For testing and exploratin you can visit and enter these credentials for sign in . 
+<h6>Username: b@gmail.com
+</h6>
+<h6>Pass: b@gmail.com</h6>
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+You can also sign up by entering fake details (state must contain only american states name in 2 letter and postal code should also be american) 
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
 
 ## 🚨 Tutorial
 
 
 
-If you prefer visual learning, this is the perfect resource for you. You can dm me on my email : aryanyashishere@gmail.com
+For collaborations and research, you can dm me on my email : aryanyashishere@gmail.com
+
+
 
 
 
@@ -43,7 +40,7 @@ If you prefer visual learning, this is the perfect resource for you. You can dm 
 
 Built with Next.js, Horizon is a financial SaaS platform that connects to multiple bank accounts, displays transactions in real-time, allows users to transfer money to other platform users, and manages their finances altogether. 
 
-If you're getting started and need assistance or face any bugs, join our active Discord community with over **34k+** members. It's a place where people help each other out.
+
 
 
 
