@@ -11,7 +11,8 @@
 <h4 align="center">Explore it here: <a href="https://equison.vercel.app/" target="_blank"> Click here</a></h4>
 
    <div align="center">
-   By <a href="https://www.youtube.com/@javascriptmastery/videos" target="_blank"><b>Aryan Yash</b></a>
+   By <b>Aryan Yash</b>
+   <b>aryanyashishere@gmail.com</b>
     </div>
 </div>
 
